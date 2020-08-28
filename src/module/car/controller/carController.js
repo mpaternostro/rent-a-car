@@ -17,6 +17,7 @@ module.exports = class CarController {
     const ROUTE = this.ROUTE_BASE;
     app.get(`${ROUTE}`, this.index.bind(this));
     app.get(`${ROUTE}/manage`, this.manage.bind(this));
+    app.get(`${ROUTE}/view/:carId`, this.view.bind(this));
     app.get(`${ROUTE}/add`, this.add.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
   }
@@ -43,6 +44,19 @@ module.exports = class CarController {
     res.render(`${this.CAR_VIEWS}/manage.njk`, {
       title: 'Car List',
       cars,
+    });
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  view(req, res) {
+    const { carId } = req.params;
+    const car = this.carService.getById(carId);
+    res.render(`${this.CAR_VIEWS}/view.njk`, {
+      title: `${car.brand} ${car.model} ${car.id}`,
+      car,
     });
   }
 

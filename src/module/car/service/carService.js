@@ -16,4 +16,11 @@ module.exports = class CarService {
   getAll() {
     return this.carRepository.getAll();
   }
+
+  /**
+   * @param {number} carId
+   */
+  getById(carId) {
+    return this.carRepository.getById(carId);
+  }
 };

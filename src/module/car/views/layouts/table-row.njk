@@ -1,0 +1,17 @@
+<tr>
+  <th>{{ car.id }}</th>
+  <td>{{ car.brand }}</td>
+  <td>{{ car.model }}</td>
+  <td>{{ car.year }}</td>
+  <td>{{ car.kms }}</td>
+  <td>{{ car.color }}</td>
+  <td>{{ car.ac }}</td>
+  <td>{{ car.passengers }}</td>
+  <td>{{ car.transmission }}</td>
+  <td>{{ car.price }}</td>
+  <td>
+    <a href={{"/car/view/" + car.id}}>View</a>
+    <a href={{"/car/edit/" + car.id}}>Edit</a>
+    <a href={{"/car/delete/" + car.id}}>Delete</a>
+  </td>
+</tr>

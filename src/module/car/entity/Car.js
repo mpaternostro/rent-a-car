@@ -1,4 +1,18 @@
 module.exports = class Car {
+  /**
+   * @param {number} id
+   * @param {string} brand
+   * @param {string} model
+   * @param {number} year
+   * @param {number} kms
+   * @param {string} color
+   * @param {string} ac
+   * @param {number} passengers
+   * @param {string} transmission
+   * @param {number} price
+   * @param {string} createdAt
+   * @param {string} updatedAt
+   */
   constructor(
     id,
     brand,
@@ -19,11 +33,11 @@ module.exports = class Car {
     this.year = year;
     this.kms = kms;
     this.color = color;
-    this.ac = ac === 'on' ? 'Yes' : 'No';
+    this.ac = ac;
     this.passengers = passengers;
-    this.transmission = transmission === 'on' ? 'Manual' : 'Automatic';
+    this.transmission = transmission;
     this.price = price;
-    this.createdAt = createdAt || undefined;
-    this.updatedAt = updatedAt || undefined;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 };

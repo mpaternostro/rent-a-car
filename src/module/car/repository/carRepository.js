@@ -12,12 +12,25 @@ module.exports = class CarRepository {
    * @param {import('../entity/Car')} car
    */
   save(car) {
-    // RECIBE DATOS DE UN AUTO, SE FIJA SI ES UNO NUEVO O UNO PREEXISTENTE Y LO AGREGA/MODIFICA
     const { id, brand, model, year, kms, color, ac, passengers, transmission, price } = car;
     if (id) {
-      // Modificar auto
+      const stmt = this.databaseAdapter.prepare(
+        `UPDATE cars
+        SET 
+          brand = ?,
+          model = ?,
+          year = ?,
+          kms = ?,
+          color = ?,
+          ac = ?,
+          passengers = ?,
+          transmission = ?,
+          price = ?,
+          updated_at = datetime('now', 'localtime')
+      WHERE id = ?`
+      );
+      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, id);
     } else {
-      // Crear nuevo auto
       const stmt = this.databaseAdapter.prepare(
         `INSERT INTO cars(
           brand,

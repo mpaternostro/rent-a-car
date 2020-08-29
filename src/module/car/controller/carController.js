@@ -18,6 +18,7 @@ module.exports = class CarController {
     app.get(`${ROUTE}`, this.index.bind(this));
     app.get(`${ROUTE}/manage`, this.manage.bind(this));
     app.get(`${ROUTE}/view/:carId`, this.view.bind(this));
+    app.get(`${ROUTE}/edit/:carId`, this.edit.bind(this));
     app.get(`${ROUTE}/add`, this.add.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
   }
@@ -64,8 +65,22 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
+  edit(req, res) {
+    const { carId } = req.params;
+    const car = this.carService.getById(carId);
+    console.log(car.createdAt);
+    res.render(`${this.CAR_VIEWS}/edit.njk`, {
+      title: `Editing ${car.brand} ${car.model} ${car.id}`,
+      car,
+    });
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   add(req, res) {
-    res.render(`${this.CAR_VIEWS}/add-form.njk`, {
+    res.render(`${this.CAR_VIEWS}/add.njk`, {
       title: 'Add New Car',
     });
   }

@@ -23,4 +23,11 @@ module.exports = class CarService {
   getById(carId) {
     return this.carRepository.getById(carId);
   }
+
+  /**
+   * @param {import('../entity/Car')} car
+   */
+  delete(car) {
+    this.carRepository.delete(car);
+  }
 };

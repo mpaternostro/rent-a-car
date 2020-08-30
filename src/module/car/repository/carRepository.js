@@ -93,4 +93,13 @@ module.exports = class CarRepository {
     const carData = stmt.get(carId);
     return fromDbToEntity(carData);
   }
+
+  /**
+   * @param {number} carId
+   */
+  delete(car) {
+    const { id } = car;
+    const stmt = this.databaseAdapter.prepare('DELETE FROM cars WHERE id = ?');
+    stmt.run(id);
+  }
 };

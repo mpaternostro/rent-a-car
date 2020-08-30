@@ -26,6 +26,11 @@
           {% endfor %}
         </tbody>
       </table>
+      {% include "car/views/layouts/delete-modal.njk" %}
     </div>
   </section>
+{% endblock %}
+
+{% block footerScripts %}
+  <script type="text/javascript" src="/js/toggle-modal.js"></script>
 {% endblock %}

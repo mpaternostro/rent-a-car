@@ -21,6 +21,7 @@ module.exports = class CarController {
     app.get(`${ROUTE}/edit/:carId`, this.edit.bind(this));
     app.get(`${ROUTE}/add`, this.add.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
+    app.post(`${ROUTE}/delete/:carId`, this.delete.bind(this));
   }
 
   /**
@@ -29,7 +30,6 @@ module.exports = class CarController {
    */
   index(req, res) {
     const cars = this.carService.getAll();
-    console.log(cars);
     res.render(`${this.CAR_VIEWS}/index.njk`, {
       title: 'Rent a Car',
       cars,
@@ -68,7 +68,6 @@ module.exports = class CarController {
   edit(req, res) {
     const { carId } = req.params;
     const car = this.carService.getById(carId);
-    console.log(car.createdAt);
     res.render(`${this.CAR_VIEWS}/edit.njk`, {
       title: `Editing ${car.brand} ${car.model} ${car.id}`,
       car,
@@ -89,10 +88,20 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-
   save(req, res) {
     const car = fromFormToEntity(req.body);
     this.carService.save(car);
+    res.redirect('/');
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  delete(req, res) {
+    const { carId } = req.params;
+    const car = this.carService.getById(carId);
+    this.carService.delete(car);
     res.redirect('/');
   }
 };

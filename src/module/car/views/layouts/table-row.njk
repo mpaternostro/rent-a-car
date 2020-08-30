@@ -1,0 +1,34 @@
+<tr class="car-data"
+data-id={{ car.id }}
+data-brand={{ car.brand }}
+data-model={{ car.model }}
+data-year={{ car.year }}
+>
+  <th>{{ car.id }}</th>
+  <td>{{ car.brand }}</td>
+  <td>{{ car.model }}</td>
+  <td>{{ car.year }}</td>
+  <td>{{ car.kms }}</td>
+  <td>{{ car.color }}</td>
+  <td>{{ car.ac }}</td>
+  <td>{{ car.passengers }}</td>
+  <td>{{ car.transmission }}</td>
+  <td>{{ car.price }}</td>
+  <td>
+    <a class="button" href={{"/car/view/" + car.id}}>
+      <span class="icon">
+        <i class="fas fa-search has-text-black"></i>
+      </span>
+    </a>
+    <a class="button" href={{"/car/edit/" + car.id}}>
+      <span class="icon">
+        <i class="fas fa-edit has-text-black"></i>
+      </span>
+    </a>
+    <button class="button delete-button">
+      <span class="icon">
+        <i class="fas fa-trash"></i>
+      </span>
+    </button>
+  </td>
+</tr>

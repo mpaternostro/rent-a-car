@@ -1,0 +1,126 @@
+<form method="POST" action="/car/save">
+  {% if car %}
+    <input type="hidden" name="id" value={{ car.id }}>
+  {% endif %}
+  <div class="field">
+    <label class="label">Brand</label>
+    <div class="control">
+      <div class="select">
+        <select name="brand">
+          <option disabled>Choose one</option>
+          <option value="Ford" {{ 'selected' if car.brand === 'Ford' }}>Ford</option>
+          <option value="Chevrolet" {{ 'selected' if car.brand === 'Chevrolet' }}>Chevrolet</option>
+          <option value="Peugeot" {{ 'selected' if car.brand === 'Peugeot' }}>Peugeot</option>
+          <option value="Honda" {{ 'selected' if car.brand === 'Honda' }}>Honda</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="label">Model</label>
+    <div class="control">
+      <input required class="input" type="text" name="model" placeholder="i.e. Onyx, 207, Fit"
+      {% if car %}
+        value={{ car.model }}
+      {% endif %}>
+    </div>
+  </div>
+  <div class="field">
+    <label class="label">Year</label>
+    <div class="control">
+      <div class="select">
+        <select name="year">
+          <option disabled>Choose one</option>
+          <option value="2020" {{ 'selected' if car.year === 2020 }}>2020</option>
+          <option value="2019" {{ 'selected' if car.year === 2019 }}>2019</option>
+          <option value="2018" {{ 'selected' if car.year === 2018 }}>2018</option>
+          <option value="2017" {{ 'selected' if car.year === 2017 }}>2017</option>
+          <option value="2016" {{ 'selected' if car.year === 2016 }}>2016</option>
+          <option value="2015" {{ 'selected' if car.year === 2015 }}>2015</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="label">Kms</label>
+    <div class="control">
+      <input required class="input" type="number" name="kms"
+      {% if car %}
+        value={{ car.kms }}
+      {% endif %}>
+    </div>
+  </div>
+  <div class="field">
+    <label class="label">Color</label>
+    <div class="control">
+      <input required class="input" type="text" name="color"
+      {% if car %}
+        value={{ car.color }}
+      {% endif %}>
+    </div>
+  </div>
+  <div class="field">
+    <div class="control">
+      <label class="label">Air Conditioner</label>
+      <label class="radio">
+        <input required type="radio" name="ac" value="Yes" {{ 'checked' if car.ac === 'Yes' }}>
+        Yes
+      </label>
+      <label class="radio">
+        <input required type="radio" name="ac" value="No" {{ 'checked' if car.ac === 'No' }}>
+        No
+      </label>
+    </div>
+  </div>
+  <div class="field">
+    <label class="label">Passengers</label>
+    <div class="control">
+      <div class="select">
+        <select name="passengers">
+          <option disabled>Choose one</option>
+          <option value="2" {{ 'selected' if car.passengers === 2 }}>2</option>
+          <option value="3" {{ 'selected' if car.passengers === 3 }}>3</option>
+          <option value="4" {{ 'selected' if car.passengers === 4 }}>4</option>
+          <option value="5" {{ 'selected' if car.passengers === 5 }}>5</option>
+          <option value="6" {{ 'selected' if car.passengers === 6 }}>6</option>
+          <option value="7" {{ 'selected' if car.passengers === 7 }}>7</option>
+          <option value="8" {{ 'selected' if car.passengers === 8 }}>8</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <div class="control">
+      <label class="label">Transmission</label>
+      <label class="radio">
+        <input required type="radio" name="transmission" value="Manual" {{ 'checked' if car.transmission === 'Manual' }}>
+      Manual
+    </label>
+      <label class="radio">
+        <input required type="radio" name="transmission" value="Automatic" {{ 'checked' if car.transmission === 'Automatic' }}>
+      Automatic
+    </label>
+    </div>
+  </div>
+  <div class="field">
+    <label class="label">Price</label>
+    <div class="control">
+      <input required class="input" type="number" name="price" autocomplete="off"
+      {% if car %}
+        value={{ car.price }}
+      {% endif %}>
+    </div>
+  </div>
+  {% if car %}
+    <input type="hidden" name="created_at" value="{{ car.createdAt }}">
+  {% endif %}
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-link" type="submit">Submit</button>
+    </div>
+    <div class="control">
+      <button class="button is-link is-light cancel-button" type="button">Cancel</button>
+    </div>
+  </div>
+
+</form>

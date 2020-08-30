@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS cars (
+DROP TABLE IF EXISTS cars;
+CREATE TABLE cars (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
   brand TEXT NOT NULL,
   model TEXT NOT NULL,
@@ -8,4 +9,7 @@ CREATE TABLE IF NOT EXISTS cars (
   ac INTEGER NOT NULL,
   passengers INTEGER NOT NULL,
   transmission INTEGER NOT NULL,
+  price INTEGER NOT NULL,
+  created_at DATE DEFAULT (datetime('now', 'localtime')) NOT NULL,
+  updated_at DATE DEFAULT (datetime('now', 'localtime')) NOT NULL
 );

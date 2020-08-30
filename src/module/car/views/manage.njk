@@ -1,0 +1,36 @@
+{% extends "views/layouts/base.njk" %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">There are currently {{ cars.length }} total cars.</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Kms</th>
+            <th>Color</th>
+            <th>AC</th>
+            <th>Passengers</th>
+            <th>Transmission</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for car in cars %}
+            {% include "car/views/layouts/table-row.njk" %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include "car/views/layouts/delete-modal.njk" %}
+    </div>
+  </section>
+{% endblock %}
+
+{% block footerScripts %}
+  <script type="text/javascript" src="/js/toggle-modal.js"></script>
+{% endblock %}

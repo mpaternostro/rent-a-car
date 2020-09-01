@@ -1,6 +1,6 @@
 {
-  "extends": ["airbnb-base", "prettier"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb-base", "prettier", "plugin:jest/recommended"],
+  "plugins": ["prettier", "jest"],
   "rules": {
     "prettier/prettier": [
       "error",
@@ -8,5 +8,10 @@
         "endOfLine": "auto"
       }
     ]
+  },
+  "env": {
+    "jest": true,
+    "browser": true,
+    "node": true
   }
 }

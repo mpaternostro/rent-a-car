@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const $modal = document.querySelector('.modal');
 const $html = document.querySelector('html');
 const $deleteButtons = document.querySelectorAll('.delete-button');

@@ -1,10 +1,14 @@
 {% extends "views/layouts/base.njk" %}
 
+{% block stylesheets %}
+  <link rel="stylesheet" href="/css/manage.css">
+{% endblock %}
+
 {% block body %}
   <section class="section">
     <div class="container">
       <h1 class="title">There are currently {{ cars.length }} total cars.</h1>
-      <table class="table">
+      <table class="table align-middle">
         <thead>
           <tr>
             <th>ID</th>

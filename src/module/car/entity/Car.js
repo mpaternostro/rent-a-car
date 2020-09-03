@@ -10,6 +10,7 @@ module.exports = class Car {
    * @param {number} passengers
    * @param {string} transmission
    * @param {number} price
+   * @param {string} img
    * @param {string} createdAt
    * @param {string} updatedAt
    */
@@ -24,6 +25,7 @@ module.exports = class Car {
     passengers,
     transmission,
     price,
+    img,
     createdAt,
     updatedAt
   ) {
@@ -37,6 +39,7 @@ module.exports = class Car {
     this.passengers = passengers;
     this.transmission = transmission;
     this.price = price;
+    this.img = img;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

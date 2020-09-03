@@ -4,8 +4,9 @@ module.exports = class CarController {
   /**
    * @param {import('../service/carService')} carService
    */
-  constructor(carService) {
+  constructor(carService, uploadMiddleware) {
     this.carService = carService;
+    this.uploadMiddleware = uploadMiddleware;
     this.ROUTE_BASE = '/car';
     this.CAR_VIEWS = 'car/views';
   }
@@ -20,7 +21,7 @@ module.exports = class CarController {
     app.get(`${ROUTE}/view/:carId`, this.view.bind(this));
     app.get(`${ROUTE}/edit/:carId`, this.edit.bind(this));
     app.get(`${ROUTE}/add`, this.add.bind(this));
-    app.post(`${ROUTE}/save`, this.save.bind(this));
+    app.post(`${ROUTE}/save`, this.uploadMiddleware.single('car-photo'), this.save.bind(this));
     app.post(`${ROUTE}/delete/:carId`, this.delete.bind(this));
   }
 
@@ -30,9 +31,11 @@ module.exports = class CarController {
    */
   index(req, res) {
     const cars = this.carService.getAll();
+    const [lastAddedCar] = cars.reverse();
     res.render(`${this.CAR_VIEWS}/index.njk`, {
       title: 'Rent a Car',
       cars,
+      lastAddedCar,
     });
   }
 
@@ -56,7 +59,7 @@ module.exports = class CarController {
     const { carId } = req.params;
     const car = this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
-      title: `${car.brand} ${car.model} ${car.id}`,
+      title: `Viewing ${car.brand} ${car.model} ${car.year}`,
       car,
     });
   }
@@ -90,6 +93,10 @@ module.exports = class CarController {
    */
   save(req, res) {
     const car = fromFormToEntity(req.body);
+    if (req.file) {
+      const path = req.file.path.split('public')[1];
+      car.img = path;
+    }
     this.carService.save(car);
     res.redirect('/');
   }

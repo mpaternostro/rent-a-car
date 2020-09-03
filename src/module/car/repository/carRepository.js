@@ -12,7 +12,7 @@ module.exports = class CarRepository {
    * @param {import('../entity/Car')} car
    */
   save(car) {
-    const { id, brand, model, year, kms, color, ac, passengers, transmission, price } = car;
+    const { id, brand, model, year, kms, color, ac, passengers, transmission, price, img } = car;
     if (id) {
       const stmt = this.databaseAdapter.prepare(
         `UPDATE cars
@@ -26,10 +26,11 @@ module.exports = class CarRepository {
           passengers = ?,
           transmission = ?,
           price = ?,
+          img = ?,
           updated_at = datetime('now', 'localtime')
       WHERE id = ?`
       );
-      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, id);
+      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img, id);
     } else {
       const stmt = this.databaseAdapter.prepare(
         `INSERT INTO cars(
@@ -41,10 +42,11 @@ module.exports = class CarRepository {
           ac,
           passengers,
           transmission,
-          price
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          price,
+          img
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       );
-      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price);
+      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img);
     }
   }
 
@@ -61,6 +63,7 @@ module.exports = class CarRepository {
         passengers,
         transmission,
         price,
+        img,
         created_at,
         updated_at
         FROM cars`
@@ -85,6 +88,7 @@ module.exports = class CarRepository {
         passengers,
         transmission,
         price,
+        img,
         created_at,
         updated_at
         FROM cars

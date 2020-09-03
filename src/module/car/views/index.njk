@@ -30,21 +30,59 @@
       <div class="container">
         <h1 class="title">
         Last Added Car
-      </h1>
-        <ul class="subtitle">
-          <li>ID: {{ cars[cars.length - 1].id }}</li>
-          <li>Brand: {{ cars[cars.length - 1].brand }}</li>
-          <li>Model: {{ cars[cars.length - 1].model }}</li>
-          <li>Year: {{ cars[cars.length - 1].year }}</li>
-          <li>{{ cars[cars.length - 1].kms }} kms</li>
-          <li>Color: {{ cars[cars.length - 1].color }}</li>
-          <li>Air Conditioner: {{ cars[cars.length - 1].ac }}</li>
-          <li>Max passengers: {{ cars[cars.length - 1].passengers }}</li>
-          <li>Transmission: {{ cars[cars.length - 1].transmission }}</li>
-          <li>Price: $ {{ cars[cars.length - 1].price }}</li>
-          <li>Created: {{ cars[cars.length - 1].createdAt }}</li>
-          <li>Updated: {{ cars[cars.length - 1].updatedAt }}</li>
-        </ul>
+        </h1>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ lastAddedCar.id }}</td>
+            </tr>
+            <tr>
+              <th>Brand</th>
+              <td>{{ lastAddedCar.brand }}</td>
+            </tr>
+            <tr>
+              <th>Model</th>
+              <td>{{ lastAddedCar.model }}</td>
+            </tr>
+            <tr>
+              <th>Year</th>
+              <td>{{ lastAddedCar.year }}</td>
+            </tr>
+            <tr>
+              <th>Kilometer Count</th>
+              <td>{{ lastAddedCar.kms }} kms</td>
+            </tr>
+            <tr>
+              <th>Color</th>
+              <td>{{ lastAddedCar.color }}</td>
+            </tr>
+            <tr>
+              <th>Air Conditioner</th>
+              <td>{{ lastAddedCar.ac }}</td>
+            </tr>
+            <tr>
+              <th>Max passengers</th>
+              <td>{{ lastAddedCar.passengers }}</td>
+            </tr>
+            <tr>
+              <th>Transmission</th>
+              <td>{{ lastAddedCar.transmission }}</td>
+            </tr>
+            <tr>
+              <th>Price</th>
+              <td>$ {{ lastAddedCar.price }}</td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td>{{ lastAddedCar.createdAt }}</td>
+            </tr>
+            <tr>
+              <th>Updated</th>
+              <td>{{ lastAddedCar.updatedAt }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>

@@ -13,6 +13,7 @@ module.exports = class CarRepository {
    */
   save(car) {
     const { id, brand, model, year, kms, color, ac, passengers, transmission, price, img } = car;
+    let lastInsertRowid;
     if (id) {
       const stmt = this.databaseAdapter.prepare(
         `UPDATE cars
@@ -30,24 +31,50 @@ module.exports = class CarRepository {
           updated_at = datetime('now', 'localtime')
       WHERE id = ?`
       );
-      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img, id);
+      const info = stmt.run(
+        brand,
+        model,
+        year,
+        kms,
+        color,
+        ac,
+        passengers,
+        transmission,
+        price,
+        img,
+        id
+      );
+      lastInsertRowid = info.lastInsertRowid;
     } else {
       const stmt = this.databaseAdapter.prepare(
         `INSERT INTO cars(
-          brand,
-          model,
-          year,
-          kms,
-          color,
-          ac,
-          passengers,
-          transmission,
-          price,
-          img
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            brand,
+            model,
+            year,
+            kms,
+            color,
+            ac,
+            passengers,
+            transmission,
+            price,
+            img
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       );
-      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img);
+      const info = stmt.run(
+        brand,
+        model,
+        year,
+        kms,
+        color,
+        ac,
+        passengers,
+        transmission,
+        price,
+        img
+      );
+      lastInsertRowid = info.lastInsertRowid;
     }
+    return this.getById(lastInsertRowid);
   }
 
   getAll() {
@@ -99,11 +126,12 @@ module.exports = class CarRepository {
   }
 
   /**
-   * @param {number} carId
+   * @param {import('../entity/Car')} car
    */
   delete(car) {
     const { id } = car;
     const stmt = this.databaseAdapter.prepare('DELETE FROM cars WHERE id = ?');
     stmt.run(id);
+    return car;
   }
 };

@@ -21,7 +21,6 @@
   "homepage": "https://github.com/mpaternostro/rent-a-car#readme",
   "devDependencies": {
     "@types/jest": "^26.0.10",
-    "cypress": "^5.0.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",

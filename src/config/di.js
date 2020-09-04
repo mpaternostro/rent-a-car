@@ -10,7 +10,9 @@ const CarRepository = require('../module/car/repository/carRepository');
 const CarService = require('../module/car/service/carService');
 
 function configureMainDatabaseAdapter() {
-  return new Database(process.env.DB_PATH, { verbose: console.log });
+  const db = new Database(process.env.DB_PATH, { verbose: console.log });
+  db.exec(fs.readFileSync('./src/config/setup.sql', 'utf-8'));
+  return db;
 }
 
 function configureMulter() {

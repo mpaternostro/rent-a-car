@@ -13,7 +13,7 @@
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Available Cars</p>
-            <p class="title">1</p>
+            <p class="title">0</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
@@ -25,65 +25,65 @@
       </nav>
     </div>
   </section>
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">
-        Last Added Car
-        </h1>
-        <table class="table">
-          <tbody>
-            <tr>
-              <th>ID</th>
-              <td>{{ lastAddedCar.id }}</td>
-            </tr>
-            <tr>
-              <th>Brand</th>
-              <td>{{ lastAddedCar.brand }}</td>
-            </tr>
-            <tr>
-              <th>Model</th>
-              <td>{{ lastAddedCar.model }}</td>
-            </tr>
-            <tr>
-              <th>Year</th>
-              <td>{{ lastAddedCar.year }}</td>
-            </tr>
-            <tr>
-              <th>Kilometer Count</th>
-              <td>{{ lastAddedCar.kms }} kms</td>
-            </tr>
-            <tr>
-              <th>Color</th>
-              <td>{{ lastAddedCar.color }}</td>
-            </tr>
-            <tr>
-              <th>Air Conditioner</th>
-              <td>{{ lastAddedCar.ac }}</td>
-            </tr>
-            <tr>
-              <th>Max passengers</th>
-              <td>{{ lastAddedCar.passengers }}</td>
-            </tr>
-            <tr>
-              <th>Transmission</th>
-              <td>{{ lastAddedCar.transmission }}</td>
-            </tr>
-            <tr>
-              <th>Price</th>
-              <td>$ {{ lastAddedCar.price }}</td>
-            </tr>
-            <tr>
-              <th>Created</th>
-              <td>{{ lastAddedCar.createdAt }}</td>
-            </tr>
-            <tr>
-              <th>Updated</th>
-              <td>{{ lastAddedCar.updatedAt }}</td>
-            </tr>
-          </tbody>
-        </table>
+  {% if lastAddedCar %}
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Last Added Car</h1>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>ID</th>
+                <td>{{ lastAddedCar.id }}</td>
+              </tr>
+              <tr>
+                <th>Brand</th>
+                <td>{{ lastAddedCar.brand }}</td>
+              </tr>
+              <tr>
+                <th>Model</th>
+                <td>{{ lastAddedCar.model }}</td>
+              </tr>
+              <tr>
+                <th>Year</th>
+                <td>{{ lastAddedCar.year }}</td>
+              </tr>
+              <tr>
+                <th>Kilometer Count</th>
+                <td>{{ lastAddedCar.kms }} kms</td>
+              </tr>
+              <tr>
+                <th>Color</th>
+                <td>{{ lastAddedCar.color }}</td>
+              </tr>
+              <tr>
+                <th>Air Conditioner</th>
+                <td>{{ lastAddedCar.ac }}</td>
+              </tr>
+              <tr>
+                <th>Max passengers</th>
+                <td>{{ lastAddedCar.passengers }}</td>
+              </tr>
+              <tr>
+                <th>Transmission</th>
+                <td>{{ lastAddedCar.transmission }}</td>
+              </tr>
+              <tr>
+                <th>Price</th>
+                <td>$ {{ lastAddedCar.price }}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>{{ lastAddedCar.createdAt }}</td>
+              </tr>
+              <tr>
+                <th>Updated</th>
+                <td>{{ lastAddedCar.updatedAt }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  {% endif %}
 {% endblock %}

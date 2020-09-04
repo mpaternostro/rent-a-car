@@ -13,11 +13,10 @@ module.exports = class CarRepository {
    */
   save(car) {
     const { id, brand, model, year, kms, color, ac, passengers, transmission, price, img } = car;
-    let lastInsertRowid;
     if (id) {
       const stmt = this.databaseAdapter.prepare(
         `UPDATE cars
-        SET 
+        SET
           brand = ?,
           model = ?,
           year = ?,
@@ -31,23 +30,12 @@ module.exports = class CarRepository {
           updated_at = datetime('now', 'localtime')
       WHERE id = ?`
       );
-      const info = stmt.run(
-        brand,
-        model,
-        year,
-        kms,
-        color,
-        ac,
-        passengers,
-        transmission,
-        price,
-        img,
-        id
-      );
-      lastInsertRowid = info.lastInsertRowid;
-    } else {
-      const stmt = this.databaseAdapter.prepare(
-        `INSERT INTO cars(
+      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img, id);
+      return this.getById(id);
+    }
+
+    const stmt = this.databaseAdapter.prepare(
+      `INSERT INTO cars(
             brand,
             model,
             year,
@@ -59,21 +47,9 @@ module.exports = class CarRepository {
             price,
             img
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-      );
-      const info = stmt.run(
-        brand,
-        model,
-        year,
-        kms,
-        color,
-        ac,
-        passengers,
-        transmission,
-        price,
-        img
-      );
-      lastInsertRowid = info.lastInsertRowid;
-    }
+    );
+    const info = stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img);
+    const { lastInsertRowid } = info;
     return this.getById(lastInsertRowid);
   }
 

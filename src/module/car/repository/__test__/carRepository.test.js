@@ -31,6 +31,11 @@ describe('CarRepository methods', () => {
     expect(newCar.brand).toEqual('Ford');
     expect(newCar.model).toEqual('Fiesta');
 
+    const newCarTwo = repository.save(carWithoutId);
+    expect(newCarTwo.id).toEqual(2);
+    expect(newCarTwo.brand).toEqual('Ford');
+    expect(newCarTwo.model).toEqual('Fiesta');
+
     const updatedCar = repository.save(carWithId);
     expect(updatedCar.id).toEqual(1);
     expect(updatedCar.brand).toEqual('Chevrolet');

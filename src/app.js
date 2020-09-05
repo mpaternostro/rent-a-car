@@ -4,7 +4,7 @@ const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
 
 const configureDIC = require('./config/di');
-const initCarModule = require('./module/car/module');
+const { initCarModule } = require('./module/car/module');
 
 const app = express();
 const port = 3000;

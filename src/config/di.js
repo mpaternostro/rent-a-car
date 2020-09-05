@@ -5,9 +5,7 @@ const { default: DIContainer, object, get, factory } = require('rsdi');
 const Database = require('better-sqlite3');
 const multer = require('multer');
 
-const CarController = require('../module/car/controller/carController');
-const CarRepository = require('../module/car/repository/carRepository');
-const CarService = require('../module/car/service/carService');
+const { CarController, CarService, CarRepository } = require('../module/car/module');
 
 function configureMainDatabaseAdapter() {
   const db = new Database(process.env.DB_PATH, { verbose: console.log });

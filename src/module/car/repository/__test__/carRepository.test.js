@@ -1,68 +1,74 @@
-const fs = require('fs');
-
-const Database = require('better-sqlite3');
+const { Sequelize } = require('sequelize');
 const CarRepository = require('../carRepository');
+const carModel = require('../../model/carModel');
 const { carWithoutId, carWithId } = require('./cars.fixture');
 
 describe('CarRepository methods', () => {
-  let db;
-  /**
-   * @type {CarRepository}
-   */
-  let repository;
+  const sequelize = new Sequelize('sqlite::memory');
+  const car = carModel.setup(sequelize);
+  const repository = new CarRepository(car);
 
-  beforeEach(() => {
-    const stmt = fs.readFileSync('./src/config/setup.sql', 'utf-8');
-    db = new Database(':memory:');
-    repository = new CarRepository(db);
-    repository.databaseAdapter.exec(stmt);
+  beforeEach(async () => {
+    await sequelize.sync({ force: true });
   });
 
-  test('saves a new car in DB and retrieves this car with getById', () => {
-    const { id, brand, model } = repository.save(carWithoutId);
+  test('saves a new car in DB', async () => {
+    const { id, brand, model } = await repository.save(carWithoutId);
     expect(id).toEqual(1);
     expect(brand).toEqual('Ford');
     expect(model).toEqual('Fiesta');
   });
 
-  test('updates a car in DB and retrieves this car with getById', () => {
-    const newCar = repository.save(carWithoutId);
+  test('updates a car in DB', async () => {
+    const newCar = await repository.save(carWithoutId);
     expect(newCar.id).toEqual(1);
     expect(newCar.brand).toEqual('Ford');
     expect(newCar.model).toEqual('Fiesta');
 
-    const newCarTwo = repository.save(carWithoutId);
+    const newCarTwo = await repository.save(carWithoutId);
     expect(newCarTwo.id).toEqual(2);
     expect(newCarTwo.brand).toEqual('Ford');
     expect(newCarTwo.model).toEqual('Fiesta');
 
-    const updatedCar = repository.save(carWithId);
+    const updatedCar = await repository.save(carWithId);
     expect(updatedCar.id).toEqual(1);
     expect(updatedCar.brand).toEqual('Chevrolet');
     expect(updatedCar.model).toEqual('Onix');
   });
 
-  test('getAll returns every car in DB', () => {
-    repository.save(carWithoutId);
-    repository.save(carWithoutId);
-    const cars = repository.getAll();
+  test('getAll returns every car stored in DB', async () => {
+    await repository.save(carWithoutId);
+    await repository.save(carWithoutId);
+    const cars = await repository.getAll();
 
     expect(cars).toHaveLength(2);
     expect(cars[0].id).toEqual(1);
     expect(cars[1].id).toEqual(2);
   });
 
-  test('deletes an existing car in DB and returns the deleted car', () => {
-    repository.save(carWithoutId);
-    repository.save(carWithoutId);
-    repository.save(carWithoutId);
+  test('deletes an existing car in DB and returns true', async () => {
+    await repository.save(carWithoutId);
+    await repository.save(carWithoutId);
+    await repository.save(carWithoutId);
 
-    const carToDelete = repository.getById(2);
-    const deletedCar = repository.delete(carToDelete);
-    const remainingCars = repository.getAll();
+    const deletedCar = await repository.delete({ id: 2 });
+    const remainingCars = await repository.getAll();
 
-    expect(deletedCar.id).toEqual(2);
+    expect(deletedCar).toEqual(true);
     expect(remainingCars[0].id).toEqual(1);
     expect(remainingCars[1].id).toEqual(3);
+  });
+
+  test('tries to delete non-existent car in DB and returns false', async () => {
+    await repository.save(carWithoutId);
+    await repository.save(carWithoutId);
+    await repository.save(carWithoutId);
+
+    const deletedCar = await repository.delete({ id: 4 });
+    const remainingCars = await repository.getAll();
+
+    expect(deletedCar).toEqual(false);
+    expect(remainingCars[0].id).toEqual(1);
+    expect(remainingCars[1].id).toEqual(2);
   });
 });

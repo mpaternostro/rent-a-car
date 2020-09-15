@@ -2,15 +2,24 @@ const fs = require('fs');
 const path = require('path');
 
 const { default: DIContainer, object, get, factory } = require('rsdi');
-const Database = require('better-sqlite3');
+const { Sequelize } = require('sequelize');
 const multer = require('multer');
 
-const { CarController, CarService, CarRepository } = require('../module/car/module');
+const { CarController, CarService, CarRepository, CarModel } = require('../module/car/module');
 
-function configureMainDatabaseAdapter() {
-  const db = new Database(process.env.DB_PATH, { verbose: console.log });
-  db.exec(fs.readFileSync('./src/config/setup.sql', 'utf-8'));
-  return db;
+function configureSequelizeDatabase() {
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: process.env.DB_PATH,
+  });
+  return sequelize;
+}
+
+/**
+ * @param {DIContainer} container
+ */
+function configureCarModule(container) {
+  return CarModel.setup(container.get('Sequelize'));
 }
 
 function configureMulter() {
@@ -32,7 +41,7 @@ function configureMulter() {
  */
 function addCommonDefinitions(container) {
   container.addDefinitions({
-    MainDatabaseAdapter: factory(configureMainDatabaseAdapter),
+    Sequelize: factory(configureSequelizeDatabase),
     Multer: factory(configureMulter),
   });
 }
@@ -44,7 +53,8 @@ function addCarModuleDefinitions(container) {
   container.addDefinitions({
     CarController: object(CarController).construct(get('CarService'), get('Multer')),
     CarService: object(CarService).construct(get('CarRepository')),
-    CarRepository: object(CarRepository).construct(get('MainDatabaseAdapter')),
+    CarRepository: object(CarRepository).construct(get('CarModel')),
+    CarModel: factory(configureCarModule),
   });
 }
 

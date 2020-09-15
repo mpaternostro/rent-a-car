@@ -29,8 +29,8 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  index(req, res) {
-    const cars = this.carService.getAll();
+  async index(req, res) {
+    const cars = await this.carService.getAll();
     const [lastAddedCar] = cars.reverse();
     res.render(`${this.CAR_VIEWS}/index.njk`, {
       title: 'Rent a Car',
@@ -43,8 +43,8 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  manage(req, res) {
-    const cars = this.carService.getAll();
+  async manage(req, res) {
+    const cars = await this.carService.getAll();
     res.render(`${this.CAR_VIEWS}/manage.njk`, {
       title: 'Car List',
       cars,
@@ -55,9 +55,9 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  view(req, res) {
+  async view(req, res) {
     const { carId } = req.params;
-    const car = this.carService.getById(carId);
+    const car = await this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
       title: `Viewing ${car.brand} ${car.model} ${car.year}`,
       car,
@@ -68,9 +68,9 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  edit(req, res) {
+  async edit(req, res) {
     const { carId } = req.params;
-    const car = this.carService.getById(carId);
+    const car = await this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/edit.njk`, {
       title: `Editing ${car.brand} ${car.model} ${car.id}`,
       car,
@@ -91,13 +91,13 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  save(req, res) {
+  async save(req, res) {
     const car = fromFormToEntity(req.body);
     if (req.file) {
       const path = req.file.path.split('public')[1];
       car.img = path;
     }
-    this.carService.save(car);
+    await this.carService.save(car);
     res.redirect('/');
   }
 
@@ -105,9 +105,9 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  delete(req, res) {
+  async delete(req, res) {
     const { carId } = req.params;
-    const car = this.carService.getById(carId);
+    const car = await this.carService.getById(carId);
     this.carService.delete(car);
     res.redirect('/');
   }

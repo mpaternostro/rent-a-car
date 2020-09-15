@@ -40,8 +40,8 @@ describe('CarController methods', () => {
     expect(uploadMock.single).toHaveBeenCalled();
   });
 
-  test('index renders index.njk with overall data and last added car', () => {
-    mockController.index(reqMock, resMock);
+  test('index renders index.njk with overall data and last added car', async () => {
+    await mockController.index(reqMock, resMock);
 
     expect(serviceMock.getAll).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledTimes(1);
@@ -52,8 +52,8 @@ describe('CarController methods', () => {
     });
   });
 
-  test('manage renders manage.njk with a list of cars', () => {
-    mockController.manage(reqMock, resMock);
+  test('manage renders manage.njk with a list of cars', async () => {
+    await mockController.manage(reqMock, resMock);
 
     expect(serviceMock.getAll).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledTimes(1);
@@ -63,8 +63,8 @@ describe('CarController methods', () => {
     });
   });
 
-  test('view renders view.njk with a single car', () => {
-    mockController.view(reqMock, resMock);
+  test('view renders view.njk with a single car', async () => {
+    await mockController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledTimes(1);
@@ -74,8 +74,8 @@ describe('CarController methods', () => {
     });
   });
 
-  test('edit renders a form to edit a car', () => {
-    mockController.edit(reqMock, resMock);
+  test('edit renders a form to edit a car', async () => {
+    await mockController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledTimes(1);
@@ -94,29 +94,29 @@ describe('CarController methods', () => {
     });
   });
 
-  test('saves a car with a photo', () => {
+  test('saves a car with a photo', async () => {
     const reqSaveMock = {
       body: {},
       file: { path: '' },
     };
 
-    mockController.save(reqSaveMock, resMock);
+    await mockController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });
 
-  test('saves a car without a photo', () => {
+  test('saves a car without a photo', async () => {
     const reqSaveMock = {
       body: {},
     };
 
-    mockController.save(reqSaveMock, resMock);
+    await mockController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });
 
-  test('deletes an existing car', () => {
-    mockController.delete(reqMock, resMock);
+  test('deletes an existing car', async () => {
+    await mockController.delete(reqMock, resMock);
 
     expect(serviceMock.delete).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);

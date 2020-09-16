@@ -1,6 +1,6 @@
 const User = require('../entity/User');
 
-exports.fromDbToEntity = ({
+exports.fromModelToEntity = ({
   id,
   firstName,
   lastName,

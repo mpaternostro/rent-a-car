@@ -1,4 +1,8 @@
-const { fromDbToEntity } = require('../mapper/userMapper');
+const { fromModelToEntity } = require('../mapper/userMapper');
+const UserNotDefinedError = require('../error/UserNotDefinedError');
+const UserIdNotDefinedError = require('../error/UserIdNotDefinedError');
+const UserNotFoundError = require('../error/UserNotFoundError');
+const User = require('../entity/User');
 
 module.exports = class UserRepository {
   /**
@@ -12,16 +16,19 @@ module.exports = class UserRepository {
    * @param {import('../entity/User')} user
    */
   async save(user) {
+    if (!(user instanceof User)) {
+      throw new UserNotDefinedError();
+    }
     const userInstance = this.userModel.build(user, {
       isNewRecord: !user.id,
     });
     await userInstance.save();
-    return fromDbToEntity(userInstance);
+    return fromModelToEntity(userInstance);
   }
 
   async getAll() {
     const userInstances = await this.userModel.findAll();
-    const users = userInstances.map((userInstance) => fromDbToEntity(userInstance));
+    const users = userInstances.map((userInstance) => fromModelToEntity(userInstance));
     return users;
   }
 
@@ -29,7 +36,13 @@ module.exports = class UserRepository {
    * @param {number} userId
    */
   async getById(userId) {
+    if (!Number(userId)) {
+      throw new UserIdNotDefinedError();
+    }
     const userInstance = await this.userModel.findByPk(userId);
-    return fromDbToEntity(userInstance);
+    if (!userInstance) {
+      throw new UserNotFoundError(`There is no existing user with ID ${userId}`);
+    }
+    return fromModelToEntity(userInstance);
   }
 };

@@ -1,4 +1,5 @@
 const { fromFormToEntity } = require('../mapper/userMapper');
+const UserIdNotDefinedError = require('../error/UserIdNotDefinedError');
 
 module.exports = class userController {
   /**
@@ -28,7 +29,7 @@ module.exports = class userController {
    */
   async manage(req, res) {
     const users = await this.userService.getAll();
-    const formattedUsers = users.map((user) => {
+    const formattedUsersBirthdate = users.map((user) => {
       const newUser = Object.assign(user);
       newUser.formattedBirthdate = new Date(user.birthdate).toLocaleString(false, {
         year: 'numeric',
@@ -40,7 +41,7 @@ module.exports = class userController {
     });
     res.render(`${this.USER_VIEWS}/manage.njk`, {
       title: 'User List',
-      users: formattedUsers,
+      users: formattedUsersBirthdate,
     });
   }
 
@@ -50,6 +51,10 @@ module.exports = class userController {
    */
   async view(req, res) {
     const { userId } = req.params;
+    if (!Number(userId)) {
+      throw new UserIdNotDefinedError();
+    }
+
     const user = await this.userService.getById(userId);
     const formattedBirthdate = new Date(user.birthdate).toLocaleString(false, {
       year: 'numeric',
@@ -58,7 +63,7 @@ module.exports = class userController {
       timeZone: 'UTC',
     });
     res.render(`${this.USER_VIEWS}/view.njk`, {
-      title: `Viewing User no. ${user.id}`,
+      title: `Viewing User #${user.id}`,
       user,
       formattedBirthdate,
     });
@@ -70,9 +75,13 @@ module.exports = class userController {
    */
   async edit(req, res) {
     const { userId } = req.params;
+    if (!Number(userId)) {
+      throw new UserIdNotDefinedError();
+    }
+
     const user = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/edit.njk`, {
-      title: `Editing User no. ${user.id}`,
+      title: `Editing User #${user.id}`,
       user,
     });
   }
@@ -94,6 +103,6 @@ module.exports = class userController {
   async save(req, res) {
     const user = fromFormToEntity(req.body);
     await this.userService.save(user);
-    res.redirect('/');
+    res.redirect(`${this.ROUTE_BASE}/manage`);
   }
 };

@@ -1,0 +1,102 @@
+<form method="POST" action="/user/save">
+  {% if user %}
+    <input type="hidden" name="id" value="{{ user.id }}">
+  {% endif %}
+  <div>
+    <div class="field">
+      <label class="label">First Name</label>
+      <div class="control">
+        <input required class="input" name="first-name" autocomplete="off"
+          {% if user %}
+            value="{{ user.firstName }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Last Name</label>
+      <div class="control">
+        <input required class="input" name="last-name" autocomplete="off"
+          {% if user %}
+            value="{{ user.lastName }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Identification Type</label>
+      <div class="control">
+        <div class="select">
+          <select name="id-type">
+            <option disabled>Choose one</option>
+            <option value="DNI" {{ 'selected' if user.idType === 'DNI' }}>DNI</option>
+            <option value="CI" {{ 'selected' if user.idType === 'CI' }}>CI</option>
+            <option value="Passport" {{ 'selected' if user.idType === 'Passport' }}>Passport</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Identification Number</label>
+      <div class="control">
+        <input required class="input" type="number" name="id-number"
+          {% if user %}
+            value="{{ user.idNumber }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Nationality</label>
+      <div class="control">
+        <input required class="input" name="nationality" autocomplete="off"
+          {% if user %}
+            value="{{ user.nationality }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Address</label>
+      <div class="control">
+        <input required class="input" name="address" autocomplete="off"
+          {% if user %}
+            value="{{ user.address }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Phone Number</label>
+      <div class="control">
+        <input required class="input" name="phone-number"
+          {% if user %}
+            value="{{ user.phoneNumber }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        <input required class="input" name="email"
+          {% if user %}
+            value="{{ user.email }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Date of Birth</label>
+      <div class="control">
+        <input required class="input" name="birthdate" type="date"
+          {% if user %}
+            value="{{ user.birthdate }}"
+          {% endif %}>
+      </div>
+    </div>
+    {% if user %}
+      <input type="hidden" name="created-at" value="{{ user.createdAt }}">
+    {% endif %}
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link" type="submit">Submit</button>
+      </div>
+      <div class="control">
+        <button class="button is-link is-light cancel-button" type="button">Cancel</button>
+      </div>
+    </div>
+  </form>

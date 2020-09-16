@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const configureDIC = require('./config/di');
 const { initCarModule } = require('./module/car/module');
+const { initUserModule } = require('./module/user/module');
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ nunjucks.configure('src/module', {
 const container = configureDIC();
 
 initCarModule(app, container);
+initUserModule(app, container);
 
 /**
  * @type {import('./module/car/controller/carController')} carController

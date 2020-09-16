@@ -6,6 +6,7 @@ const { Sequelize } = require('sequelize');
 const multer = require('multer');
 
 const { CarController, CarService, CarRepository, CarModel } = require('../module/car/module');
+const { UserController, UserService, UserRepository, UserModel } = require('../module/user/module');
 
 function configureSequelizeDatabase() {
   const sequelize = new Sequelize({
@@ -20,6 +21,13 @@ function configureSequelizeDatabase() {
  */
 function configureCarModule(container) {
   return CarModel.setup(container.get('Sequelize'));
+}
+
+/**
+ * @param {DIContainer} container
+ */
+function configureUserModule(container) {
+  return UserModel.setup(container.get('Sequelize'));
 }
 
 function configureMulter() {
@@ -58,9 +66,22 @@ function addCarModuleDefinitions(container) {
   });
 }
 
+/**
+ * @param {DIContainer} container
+ */
+function addUserModuleDefinitions(container) {
+  container.addDefinitions({
+    UserController: object(UserController).construct(get('UserService'), get('Multer')),
+    UserService: object(UserService).construct(get('UserRepository')),
+    UserRepository: object(UserRepository).construct(get('UserModel')),
+    UserModel: factory(configureUserModule),
+  });
+}
+
 module.exports = function configureDI() {
   const container = new DIContainer();
   addCommonDefinitions(container);
   addCarModuleDefinitions(container);
+  addUserModuleDefinitions(container);
   return container;
 };

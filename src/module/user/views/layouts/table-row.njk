@@ -1,0 +1,29 @@
+<tr class="car-data"
+data-id="{{ user.id }}"
+data-brand="{{ user.brand }}"
+data-model="{{ user.model }}"
+data-year="{{ user.year }}"
+>
+  <th>{{ user.id }}</th>
+  <td>{{ user.firstName }}</td>
+  <td>{{ user.lastName }}</td>
+  <td>{{ user.idType }}</td>
+  <td>{{ user.idNumber }}</td>
+  <td>{{ user.nationality }}</td>
+  <td>{{ user.address }}</td>
+  <td>{{ user.phoneNumber }}</td>
+  <td>{{ user.email }}</td>
+  <td>{{ user.formattedBirthdate }}</td>
+  <td>
+    <a class="button" href="{{"/user/view/" + user.id}}">
+      <span class="icon">
+        <i class="fas fa-search has-text-black"></i>
+      </span>
+    </a>
+    <a class="button" href="{{"/user/edit/" + user.id}}">
+      <span class="icon">
+        <i class="fas fa-edit has-text-black"></i>
+      </span>
+    </a>
+  </td>
+</tr>

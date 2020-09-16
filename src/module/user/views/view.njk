@@ -1,0 +1,83 @@
+{% extends "views/layouts/base.njk" %}
+
+{% block body %}
+  <section class="section is-light">
+    <div class="car-data"
+      data-id="{{ car.id }}"
+      data-brand="{{ car.brand }}"
+      data-model="{{ car.model }}"
+      data-year="{{ car.year }}"
+      >
+      <div class="container">
+        <h1 class="title">
+          {{ user.firstName }}
+          {{ user.lastName }}
+        </h1>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+              <th>Identification Type</th>
+              <td>{{ user.idType }}</td>
+            </tr>
+            <tr>
+              <th>Identification Number</th>
+              <td>{{ user.idNumber }}</td>
+            </tr>
+            <tr>
+              <th>Nationality</th>
+              <td>{{ user.nationality }}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td>{{ user.address }}</td>
+            </tr>
+            <tr>
+              <th>Phone Number</th>
+              <td>{{ user.phoneNumber }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+              <th>Date of Birth</th>
+              <td>{{ formattedBirthdate }}</td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td>{{ user.createdAt }}</td>
+            </tr>
+            <tr>
+              <th>Updated</th>
+              <td>{{ user.updatedAt }}</td>
+            </tr>
+            <tr></tbody>
+          </table>
+          <div class="buttons">
+            <a class="button is-link is-outlined" href="{{ '/user/edit/' + user.id }}">
+              <span>Edit</span>
+              <span class="icon is-small">
+                <i class="fas fa-edit"></i>
+              </span>
+            </a>
+            <button class="button is-danger is-outlined delete-button">
+              <span>Delete</span>
+              <span class="icon is-small">
+                <i class="fas fa-times"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "car/views/layouts/delete-modal.njk" %}
+  </section>
+{% endblock %}
+
+{% block footerScripts %}
+  <script type="text/javascript" src="/js/toggle-modal.js"></script>
+{% endblock %}

@@ -8,5 +8,6 @@ const configureDI = require('../config/di');
    */
   const sequelize = container.get('Sequelize');
   container.get('CarModel');
+  container.get('UserModel');
   await sequelize.sync();
 })();

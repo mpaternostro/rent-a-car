@@ -1,6 +1,6 @@
 const Car = require('../entity/Car');
 
-exports.fromDbToEntity = ({
+exports.fromModelToEntity = ({
   id,
   brand,
   model,

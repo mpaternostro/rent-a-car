@@ -1,4 +1,7 @@
 const CarService = require('../carService');
+const createTestCar = require('../../controller/__test__/cars.fixture');
+const CarNotDefinedError = require('../../error/CarNotDefinedError');
+const CarIdNotDefinedError = require('../../error/CarIdNotDefinedError');
 
 const repositoryMock = {
   save: jest.fn(),
@@ -11,10 +14,17 @@ const mockService = new CarService(repositoryMock);
 
 describe('CarService methods', () => {
   test("save calls repository's save method", async () => {
-    await mockService.save({});
+    const car = createTestCar(1);
+    await mockService.save(car);
 
     expect(repositoryMock.save).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.save).toHaveBeenCalledWith({});
+    expect(repositoryMock.save).toHaveBeenCalledWith(car);
+  });
+
+  test('save throws an error because of lack of Car entity as argument', async () => {
+    await expect(mockService.save({ id: 1, brand: 'Ford', model: 'Fiesta' })).rejects.toThrowError(
+      CarNotDefinedError
+    );
   });
 
   test("getAll calls repository's getAll method", async () => {
@@ -30,10 +40,21 @@ describe('CarService methods', () => {
     expect(repositoryMock.getById).toHaveBeenCalledWith(1);
   });
 
+  test('getById throws an error on undefined carId as argument', async () => {
+    await expect(mockService.getById()).rejects.toThrowError(CarIdNotDefinedError);
+  });
+
   test("delete calls repository's delete method", async () => {
-    await mockService.delete({});
+    const car = createTestCar(1);
+    await mockService.delete(car);
 
     expect(repositoryMock.delete).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.delete).toHaveBeenCalledWith({});
+    expect(repositoryMock.delete).toHaveBeenCalledWith(car);
+  });
+
+  test('delete throws an error because of lack of Car entity as argument', async () => {
+    await expect(
+      mockService.delete({ id: 1, brand: 'Ford', model: 'Fiesta' })
+    ).rejects.toThrowError(CarNotDefinedError);
   });
 });

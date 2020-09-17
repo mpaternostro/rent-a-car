@@ -1,3 +1,7 @@
+const Car = require('../entity/Car');
+const CarNotDefinedError = require('../error/CarNotDefinedError');
+const CarIdNotDefinedError = require('../error/CarIdNotDefinedError');
+
 module.exports = class CarService {
   /**
    * @param {import('../repository/carRepository')} carRepository
@@ -10,6 +14,10 @@ module.exports = class CarService {
    * @param {import('../entity/Car')} car
    */
   async save(car) {
+    if (!(car instanceof Car)) {
+      throw new CarNotDefinedError();
+    }
+
     return this.carRepository.save(car);
   }
 
@@ -21,6 +29,10 @@ module.exports = class CarService {
    * @param {number} carId
    */
   async getById(carId) {
+    if (!Number(carId)) {
+      throw new CarIdNotDefinedError();
+    }
+
     return this.carRepository.getById(carId);
   }
 
@@ -28,6 +40,10 @@ module.exports = class CarService {
    * @param {import('../entity/Car')} car
    */
   async delete(car) {
+    if (!(car instanceof Car)) {
+      throw new CarNotDefinedError();
+    }
+
     return this.carRepository.delete(car);
   }
 };

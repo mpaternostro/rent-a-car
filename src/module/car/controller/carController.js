@@ -1,4 +1,5 @@
 const { fromFormToEntity } = require('../mapper/carMapper');
+const CarIdNotDefinedError = require('../error/CarIdNotDefinedError');
 
 module.exports = class CarController {
   /**
@@ -57,6 +58,10 @@ module.exports = class CarController {
    */
   async view(req, res) {
     const { carId } = req.params;
+    if (!Number(carId)) {
+      throw new CarIdNotDefinedError();
+    }
+
     const car = await this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
       title: `Viewing ${car.brand} ${car.model} ${car.year}`,
@@ -70,9 +75,13 @@ module.exports = class CarController {
    */
   async edit(req, res) {
     const { carId } = req.params;
+    if (!Number(carId)) {
+      throw new CarIdNotDefinedError();
+    }
+
     const car = await this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/edit.njk`, {
-      title: `Editing ${car.brand} ${car.model} ${car.id}`,
+      title: `Editing ${car.brand} ${car.model} #${car.id}`,
       car,
     });
   }

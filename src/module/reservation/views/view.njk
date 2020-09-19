@@ -1,0 +1,78 @@
+{% extends "views/layouts/base.njk" %}
+
+{% block body %}
+  <section class="section is-light">
+    <div>
+      <div class="container">
+        <h1 class="title">
+          Car Reservation
+        </h1>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ reservation.id }}</td>
+            </tr>
+            <tr>
+              <th>Start Date</th>
+              <td>{{ formattedStartDate }}</td>
+            </tr>
+            <tr>
+              <th>Finish Date</th>
+              <td>{{ formattedFinishDate }}</td>
+            </tr>
+            <tr>
+              <th>Rented Car</th>
+              <td>
+                <a href={{ "/car/view/" + car.id }}>{{ "#" + car.id + " " + car.brand + " " + car.model + " " + car.year}}</a>
+              </td>
+            </tr>
+            <tr>
+              <th>Car's price per day</th>
+              <td>$ {{ reservation.pricePerDay }}</td>
+            </tr>
+            <tr>
+              <th>Final price</th>
+              <td>$ {{ reservation.totalPrice }}</td>
+            </tr>
+            <tr>
+              <th>User</th>
+              <td>
+                <a href={{ "/user/view/" + user.id }}>{{ "#" + user.id + " " + user.firstName + " " + user.lastName }}</a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Payment Method</th>
+              <td>{{ reservation.paymentMethod }}</td>
+            </tr>
+            <tr>
+              <th>Paid</th>
+              <td>{{ "Yes" if reservation.paid else "No" }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>{{ reservation.status }}</td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td>{{ reservation.createdAt }}</td>
+            </tr>
+            <tr>
+              <th>Updated</th>
+              <td>{{ reservation.updatedAt }}</td>
+            </tr>
+            <tr></tbody>
+          </table>
+          <a class="button is-link is-outlined" href="{{ '/reservation/edit/' + reservation.id }}">
+            <span>Edit</span>
+            <span class="icon is-small">
+              <i class="fas fa-edit"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% include "car/views/layouts/delete-modal.njk" %}
+  </section>
+{% endblock %}

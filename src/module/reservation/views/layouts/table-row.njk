@@ -1,0 +1,25 @@
+<tr class="reservation-data" data-id="{{ reservation.id }}" data-status="{{ reservation.status }}">
+  <th>{{ reservation.id }}</th>
+  <td>{{ reservation.formattedStartDate }}</td>
+  <td>{{ reservation.formattedFinishDate }}</td>
+  <td>$ {{ reservation.pricePerDay }}</td>
+  <td>$ {{ reservation.totalPrice }}</td>
+  <td>{{ reservation.paymentMethod }}</td>
+  <td>{{ "Yes" if reservation.paid else "No" }}</td>
+  <td>{{ reservation.status }}</td>
+  <td>{{ reservation.carId }}</td>
+  <td>{{ reservation.userId }}</td>
+  <td>
+    {% if reservation.status === "Pending" %}
+      {% include "reservation/views/layouts/status-pending-buttons.njk" %}
+    {% endif %}
+
+    {% if reservation.status === "Finished" %}
+      {% include "reservation/views/layouts/status-finished-buttons.njk" %}
+    {% endif %}
+
+    {% if reservation.status === "Confirmed" %}
+      {% include "reservation/views/layouts/status-confirmed-buttons.njk" %}
+    {% endif %}
+  </td>
+</tr>

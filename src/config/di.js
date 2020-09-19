@@ -7,6 +7,12 @@ const multer = require('multer');
 
 const { CarController, CarService, CarRepository, CarModel } = require('../module/car/module');
 const { UserController, UserService, UserRepository, UserModel } = require('../module/user/module');
+const {
+  ReservationController,
+  ReservationService,
+  ReservationRepository,
+  ReservationModel,
+} = require('../module/reservation/module');
 
 function configureSequelizeDatabase() {
   const sequelize = new Sequelize({
@@ -28,6 +34,15 @@ function configureCarModule(container) {
  */
 function configureUserModule(container) {
   return UserModel.setup(container.get('Sequelize'));
+}
+
+/**
+ * @param {DIContainer} container
+ */
+function configureReservationModule(container) {
+  const model = ReservationModel.setup(container.get('Sequelize'));
+  model.setupAssociations(CarModel, UserModel);
+  return model;
 }
 
 function configureMulter() {
@@ -71,10 +86,26 @@ function addCarModuleDefinitions(container) {
  */
 function addUserModuleDefinitions(container) {
   container.addDefinitions({
-    UserController: object(UserController).construct(get('UserService'), get('Multer')),
+    UserController: object(UserController).construct(get('UserService')),
     UserService: object(UserService).construct(get('UserRepository')),
     UserRepository: object(UserRepository).construct(get('UserModel')),
     UserModel: factory(configureUserModule),
+  });
+}
+
+/**
+ * @param {DIContainer} container
+ */
+function addReservationModuleDefinitions(container) {
+  container.addDefinitions({
+    ReservationController: object(ReservationController).construct(
+      get('ReservationService'),
+      get('CarService'),
+      get('UserService')
+    ),
+    ReservationService: object(ReservationService).construct(get('ReservationRepository')),
+    ReservationRepository: object(ReservationRepository).construct(get('ReservationModel')),
+    ReservationModel: factory(configureReservationModule),
   });
 }
 
@@ -83,5 +114,6 @@ module.exports = function configureDI() {
   addCommonDefinitions(container);
   addCarModuleDefinitions(container);
   addUserModuleDefinitions(container);
+  addReservationModuleDefinitions(container);
   return container;
 };

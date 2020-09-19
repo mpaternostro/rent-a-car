@@ -1,0 +1,108 @@
+<form method="POST" action="/reservation/save">
+  {% if reservation %}
+    <input type="hidden" name="id" value="{{ reservation.id }}">
+    <input type="hidden" name="created-at" value="{{ reservation.createdAt }}">
+  {% endif %}
+  <div>
+    <div class="field">
+      <label class="label">Start Date</label>
+      <div class="control">
+        <input required class="input" name="start-date" type="datetime-local"
+          {% if reservation %}
+            value="{{ reservation.startDate }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Finish Date</label>
+      <div class="control">
+        <input required class="input" name="finish-date" type="datetime-local"
+          {% if reservation %}
+            value="{{ reservation.finishDate }}"
+          {% endif %}>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <label class="label">Payment Method</label>
+        <label class="radio"><input required type="radio" name="payment-method"
+          {{ 'checked' if reservation.paymentMethod === 'Cash' }} value="Cash">
+          Cash
+        </label>
+        <label class="radio"><input required type="radio" name="payment-method"
+          {{ 'checked' if reservation.paymentMethod === 'Credit Card' }} value="Credit Card">
+          Credit Card
+        </label>
+        <label class="radio"><input required type="radio" name="payment-method"
+          {{ 'checked' if reservation.paymentMethod === 'Bank Transfer' }} value="Bank Transfer">
+          Bank Transfer
+        </label>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Car</label>
+      <div class="control">
+        <div class="select">
+          <select name="car-id">
+            <option disabled>Choose one</option>
+            {% for car in cars %}
+              <option value="{{ car.id }}" {{ 'selected' if reservation.carId === car.id }}>
+                {{ "#" + car.id + " - " + car.brand + " " + car.model + " " + car.year + " - " + "Price Per Day $ " + car.price + " - "
+                + car.kms + " kms - " + car.passengers + " passengers - " + car.transmission + " - AC: " + car.ac + " - Color: " + car.color }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">User</label>
+      <div class="control">
+        <div class="select">
+          <select name="user-id">
+            <option disabled>Choose one</option>
+            {% for user in users %}
+              <option value="{{ user.id }}" {{ 'selected' if reservation.userId === user.id }}>
+                #{{ user.id }} - {{ user.firstName + " " + user.lastName }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    {% if reservation %}
+      <div class="field">
+        <label class="label">Price per day</label>
+        <div class="control">
+          <input class="input" name="price-per-day" autocomplete="off" type="number"
+          placeholder="Optional. If set, it will overwrite car's price-per-day default value for this reservation."
+            {% if reservation %}
+              value="{{ reservation.pricePerDay }}"
+            {% endif %}>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="field">
+      <div class="control">
+        <label class="label">{{ "Paid" if reservation else "Pay On Reservation" }}</label>
+        <label class="radio"><input required type="radio" name="paid" value="true"
+          {{ 'checked' if reservation.paid === true }}>
+          Yes
+        </label>
+        <label class="radio"><input required type="radio" name="paid" value=""
+          {{ 'checked' if reservation.paid === false }}>
+          No
+        </label>
+      </div>
+    </div>
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link" type="submit">Submit</button>
+      </div>
+      <div class="control">
+        <button class="button is-link is-light cancel-button" type="button">Cancel</button>
+      </div>
+    </div>
+  </form>

@@ -1,0 +1,14 @@
+{% extends "views/layouts/base.njk" %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Editing Reservation with ID {{ reservation.id }}</h1>
+      {% include "reservation/views/layouts/form.njk" %}
+    </div>
+  </section>
+{% endblock %}
+
+{% block footerScripts %}
+  <script type="text/javascript" src="/js/cancel.js"></script>
+{% endblock %}

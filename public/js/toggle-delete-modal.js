@@ -27,6 +27,13 @@ function clickAway({ target }) {
 }
 
 /**
+ * @param {Event} event
+ */
+function escKey(event) {
+  if (event.key === 'Escape') event.target.dispatchEvent(handleCloseModal);
+}
+
+/**
  * @param {Event} evt
  */
 function openModal(evt) {
@@ -35,6 +42,7 @@ function openModal(evt) {
   $html.classList.add('is-clipped');
   $modal.classList.add('is-active');
   $html.addEventListener('click', clickAway);
+  $html.addEventListener('keydown', escKey);
 }
 
 function closeModal() {

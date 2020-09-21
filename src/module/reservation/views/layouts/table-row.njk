@@ -1,7 +1,7 @@
 <tr class="reservation-data" data-id="{{ reservation.id }}" data-status="{{ reservation.status }}">
   <th>{{ reservation.id }}</th>
-  <td>{{ reservation.formattedStartDate }}</td>
-  <td>{{ reservation.formattedFinishDate }}</td>
+  <td>{{ reservation.formattedDates.startDate }}</td>
+  <td>{{ reservation.formattedDates.finishDate }}</td>
   <td>$ {{ reservation.pricePerDay }}</td>
   <td>$ {{ reservation.totalPrice }}</td>
   <td>{{ reservation.paymentMethod }}</td>

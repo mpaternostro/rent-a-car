@@ -37,7 +37,17 @@ module.exports = class User {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.birthdate = birthdate;
+    this.formattedBirthdate = this.formatBirthdate();
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  formatBirthdate() {
+    return new Date(this.birthdate).toLocaleString(false, {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      timeZone: 'UTC',
+    });
   }
 };

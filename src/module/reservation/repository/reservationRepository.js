@@ -1,8 +1,12 @@
 const { fromModelToEntity } = require('../mapper/reservationMapper');
+const { fromModelToEntity: fromCarModelToEntity } = require('../../car/mapper/carMapper');
+const { fromModelToEntity: fromUserModelToEntity } = require('../../user/mapper/userMapper');
 const ReservationNotDefinedError = require('../error/ReservationNotDefinedError');
 const ReservationIdNotDefinedError = require('../error/ReservationIdNotDefinedError');
 const ReservationNotFoundError = require('../error/ReservationNotFoundError');
 const Reservation = require('../entity/Reservation');
+const CarModel = require('../../car/model/carModel');
+const UserModel = require('../../user/model/userModel');
 
 module.exports = class ReservationRepository {
   /**
@@ -41,15 +45,17 @@ module.exports = class ReservationRepository {
     if (!Number(reservationId)) {
       throw new ReservationIdNotDefinedError();
     }
-    const reservationInstance = await this.reservationModel.findByPk(reservationId);
+    const reservationInstance = await this.reservationModel.findByPk(reservationId, {
+      include: [CarModel, UserModel],
+    });
     if (!reservationInstance) {
       throw new ReservationNotFoundError(
         `There is no existing reservation with ID ${reservationId}`
       );
     }
     const reservation = fromModelToEntity(reservationInstance);
-    const car = await reservationInstance.getCar();
-    const user = await reservationInstance.getUser();
+    const car = fromCarModelToEntity(reservationInstance.Car);
+    const user = fromUserModelToEntity(reservationInstance.User);
     return { reservation, car, user };
   }
 };

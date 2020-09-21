@@ -1,14 +1,14 @@
-<button class="button finish-button">
+<button class="button finish-button" title="Mark this reservation as Finished">
   <span class="icon">
     <i class="fas fa-check"></i>
   </span>
 </button>
-<a class="button" href="{{"/reservation/view/" + reservation.id}}">
+<a class="button" href="{{"/reservation/view/" + reservation.id}}"  title="View reservation details">
   <span class="icon">
     <i class="fas fa-search has-text-black"></i>
   </span>
 </a>
-<a class="button" href="{{"/reservation/edit/" + reservation.id}}">
+<a class="button" href="{{"/reservation/edit/" + reservation.id}}" title="Edit reservation">
   <span class="icon">
     <i class="fas fa-edit has-text-black"></i>
   </span>

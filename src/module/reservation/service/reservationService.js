@@ -40,6 +40,15 @@ module.exports = class ReservationService {
     return this.reservationRepository.save(reservation);
   }
 
+  /**
+   * @param {import('../entity/Reservation')} reservation
+   */
+  async pay(reservation) {
+    reservation.payReservation();
+    reservation.fillReservationStatus(false);
+    return this.reservationRepository.save(reservation);
+  }
+
   async getAll() {
     return this.reservationRepository.getAll();
   }

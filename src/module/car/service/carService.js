@@ -25,6 +25,14 @@ module.exports = class CarService {
     return this.carRepository.getAll();
   }
 
+  async getCarsLength() {
+    return this.carRepository.getCarsLength();
+  }
+
+  async getLastCar() {
+    return this.carRepository.getLastCar();
+  }
+
   /**
    * @param {number} carId
    */

@@ -84,7 +84,16 @@
             </div>
           </div>
           <div class="column">
-            <img src="{{ car.img if car.img else '/img/no-image-available.jpg' }}" alt="car-image">
+            <div class="tile is-parent">
+              <article class="tile is-child notification is-info is-light">
+                <div class="content">
+                  <div class="content">
+                    <img src="{{ car.img if car.img else '/img/no-image-available.jpg' }}" alt="car-image">
+                  </div>
+                </div>
+              </article>
+            </div>
+            {% include "car/views/layouts/reservations-table.njk" %}
           </div>
         </div>
       </div>
@@ -94,5 +103,5 @@
 {% endblock %}
 
 {% block footerScripts %}
-  <script type="text/javascript" src="/js/toggle-modal.js"></script>
+  <script type="text/javascript" src="/js/toggle-delete-modal.js"></script>
 {% endblock %}

@@ -30,6 +30,7 @@ module.exports = class Reservation {
     this.id = id;
     this.startDate = startDate;
     this.finishDate = finishDate;
+    this.formattedDates = this.formatDate();
     this.pricePerDay = pricePerDay;
     this.totalPrice = totalPrice;
     this.paymentMethod = paymentMethod;
@@ -39,6 +40,19 @@ module.exports = class Reservation {
     this.userId = userId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  formatDate() {
+    const [startDate, finishDate] = [this.startDate, this.finishDate].map((date) =>
+      new Date(date).toLocaleString(false, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      })
+    );
+    return { startDate, finishDate };
   }
 
   calculateReservationLength() {
@@ -67,5 +81,12 @@ module.exports = class Reservation {
       return;
     }
     this.status = this.paid ? 'Confirmed' : 'Pending';
+  }
+
+  /**
+   * @param {boolean} isFinished
+   */
+  payReservation() {
+    this.paid = true;
   }
 };

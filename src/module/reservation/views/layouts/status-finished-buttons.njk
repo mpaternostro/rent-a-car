@@ -1,14 +1,14 @@
-<button class="button unblock-button">
+<button class="button unblock-button" title="Mark this reservation as Confirmed">
   <span class="icon">
     <i class="fas fa-unlock"></i>
   </span>
 </button>
-<a class="button" href="{{"/reservation/view/" + reservation.id}}">
+<a class="button" href="{{"/reservation/view/" + reservation.id}}"  title="View reservation details">
   <span class="icon">
     <i class="fas fa-search has-text-black"></i>
   </span>
 </a>
-<button class="button" disabled title="A finished Reservation cannot be modified">
+<button class="button" disabled title="A finished reservation cannot be modified">
   <span class="icon">
     <i class="fas fa-edit has-text-black"></i>
   </span>

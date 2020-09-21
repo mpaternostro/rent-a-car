@@ -27,6 +27,7 @@ module.exports = class reservationController {
     app.post(`${ROUTE}/save`, this.save.bind(this));
     app.post(`${ROUTE}/finish/:id`, this.finish.bind(this));
     app.post(`${ROUTE}/unblock/:id`, this.unblock.bind(this));
+    app.post(`${ROUTE}/pay/:id`, this.pay.bind(this));
   }
 
   /**
@@ -35,27 +36,9 @@ module.exports = class reservationController {
    */
   async manage(req, res) {
     const reservations = await this.reservationService.getAll();
-    const formattedReservationsDates = reservations.map((reservation) => {
-      const newReservation = Object.assign(reservation);
-      newReservation.formattedStartDate = new Date(reservation.startDate).toLocaleString(false, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      });
-      newReservation.formattedFinishDate = new Date(reservation.finishDate).toLocaleString(false, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      });
-      return newReservation;
-    });
     res.render(`${this.RESERVATION_VIEWS}/manage.njk`, {
       title: 'Reservation List',
-      reservations: formattedReservationsDates,
+      reservations,
     });
   }
 
@@ -70,27 +53,11 @@ module.exports = class reservationController {
     }
 
     const { reservation, car, user } = await this.reservationService.getById(reservationId);
-    const formattedStartDate = new Date(reservation.startDate).toLocaleString(false, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    });
-    const formattedFinishDate = new Date(reservation.finishDate).toLocaleString(false, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    });
     res.render(`${this.RESERVATION_VIEWS}/view.njk`, {
       title: `Viewing Reservation #${reservation.id}`,
       reservation,
       car,
       user,
-      formattedStartDate,
-      formattedFinishDate,
     });
   }
 
@@ -135,7 +102,7 @@ module.exports = class reservationController {
    */
   async save(req, res) {
     const reservation = fromFormToEntity(req.body);
-    const car = await this.carService.getById(reservation.carId);
+    const { car } = await this.carService.getById(reservation.carId);
     await this.reservationService.save(reservation, car);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
@@ -159,6 +126,17 @@ module.exports = class reservationController {
     const { id } = req.params;
     const { reservation } = await this.reservationService.getById(id);
     await this.reservationService.unblock(reservation);
+    res.redirect(`${this.ROUTE_BASE}/manage`);
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  async pay(req, res) {
+    const { id } = req.params;
+    const { reservation } = await this.reservationService.getById(id);
+    await this.reservationService.pay(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
 };

@@ -1,8 +1,12 @@
 const { fromModelToEntity } = require('../mapper/carMapper');
+const {
+  fromModelToEntity: fromReservationModelToEntity,
+} = require('../../reservation/mapper/reservationMapper');
 const Car = require('../entity/Car');
 const CarNotDefinedError = require('../error/CarNotDefinedError');
 const CarIdNotDefinedError = require('../error/CarIdNotDefinedError');
 const CarNotFoundError = require('../error/CarNotFoundError');
+const ReservationModel = require('../../reservation/model/reservationModel');
 
 module.exports = class CarRepository {
   /**
@@ -33,6 +37,17 @@ module.exports = class CarRepository {
     return cars;
   }
 
+  async getCarsLength() {
+    return this.carModel.count();
+  }
+
+  async getLastCar() {
+    const carInstance = await this.carModel.findOne({
+      order: [['id', 'DESC']],
+    });
+    return fromModelToEntity(carInstance);
+  }
+
   /**
    * @param {number} carId
    */
@@ -41,12 +56,20 @@ module.exports = class CarRepository {
       throw new CarIdNotDefinedError();
     }
 
-    const carInstance = await this.carModel.findByPk(carId);
+    const carInstance = await this.carModel.findByPk(carId, { include: ReservationModel });
     if (!carInstance) {
       throw new CarNotFoundError(`There is no existing car with ID ${carId}`);
     }
 
-    return fromModelToEntity(carInstance);
+    const car = fromModelToEntity(carInstance);
+    /**
+     * @type {import('../../reservation/entity/Reservation')[]} reservations
+     */
+    const reservations = carInstance.Reservations.map((instance) =>
+      fromReservationModelToEntity(instance)
+    );
+
+    return { car, reservations };
   }
 
   /**

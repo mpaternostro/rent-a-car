@@ -2,6 +2,7 @@ const $modal = document.querySelector('.modal');
 const $html = document.querySelector('html');
 const $finishButtons = document.querySelectorAll('.finish-button');
 const $unblockButtons = document.querySelectorAll('.unblock-button');
+const $payButtons = document.querySelectorAll('.pay-button');
 const $cancelButtons = $modal.querySelectorAll('.cancel-button');
 
 const handleOpenModal = new Event('openModal', { bubbles: true });
@@ -28,6 +29,11 @@ function fillModal(evt) {
     $statusButton.textContent = 'Unblock';
     $modalContent.textContent = `Are you sure you want to unblock finished Reservation with ID ${id} ?`;
     $modalForm.action = `/reservation/unblock/${id}`;
+  } else if (status === 'Pending') {
+    $modalTitle.textContent = 'Pay Reservation';
+    $statusButton.textContent = 'Pay';
+    $modalContent.textContent = `Are you sure you want to mark Reservation with ID ${id} as Paid ?`;
+    $modalForm.action = `/reservation/pay/${id}`;
   }
 }
 
@@ -70,6 +76,9 @@ $finishButtons.forEach((btn) =>
   btn.addEventListener('click', ({ target }) => target.dispatchEvent(handleOpenModal))
 );
 $unblockButtons.forEach((btn) =>
+  btn.addEventListener('click', ({ target }) => target.dispatchEvent(handleOpenModal))
+);
+$payButtons.forEach((btn) =>
   btn.addEventListener('click', ({ target }) => target.dispatchEvent(handleOpenModal))
 );
 $cancelButtons.forEach((btn) =>

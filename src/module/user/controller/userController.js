@@ -29,19 +29,9 @@ module.exports = class userController {
    */
   async manage(req, res) {
     const users = await this.userService.getAll();
-    const formattedUsersBirthdate = users.map((user) => {
-      const newUser = Object.assign(user);
-      newUser.formattedBirthdate = new Date(user.birthdate).toLocaleString(false, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        timeZone: 'UTC',
-      });
-      return newUser;
-    });
     res.render(`${this.USER_VIEWS}/manage.njk`, {
       title: 'User List',
-      users: formattedUsersBirthdate,
+      users,
     });
   }
 
@@ -55,17 +45,11 @@ module.exports = class userController {
       throw new UserIdNotDefinedError();
     }
 
-    const user = await this.userService.getById(userId);
-    const formattedBirthdate = new Date(user.birthdate).toLocaleString(false, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      timeZone: 'UTC',
-    });
+    const { user, reservations } = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/view.njk`, {
       title: `Viewing User #${user.id}`,
       user,
-      formattedBirthdate,
+      reservations,
     });
   }
 
@@ -79,7 +63,7 @@ module.exports = class userController {
       throw new UserIdNotDefinedError();
     }
 
-    const user = await this.userService.getById(userId);
+    const { user } = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/edit.njk`, {
       title: `Editing User #${user.id}`,
       user,

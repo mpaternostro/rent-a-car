@@ -1,7 +1,9 @@
 const { Sequelize } = require('sequelize');
 const UserRepository = require('../userRepository');
 const userModel = require('../../model/userModel');
+const reservationModel = require('../../../reservation/model/reservationModel');
 const createTestUser = require('../../controller/__test__/user.fixture');
+const createTestReservation = require('../../../reservation/controller/__test__/reservation.fixture');
 const UserNotDefinedError = require('../../error/UserNotDefinedError');
 const UserIdNotDefinedError = require('../../error/UserIdNotDefinedError');
 const UserNotFoundError = require('../../error/UserNotFoundError');
@@ -9,6 +11,9 @@ const UserNotFoundError = require('../../error/UserNotFoundError');
 describe('UserRepository methods', () => {
   const sequelize = new Sequelize('sqlite::memory');
   const UserModel = userModel.setup(sequelize);
+  const ReservationModel = reservationModel.setup(sequelize);
+  UserModel.hasMany(ReservationModel, { foreignKey: 'userId' });
+  ReservationModel.belongsTo(UserModel, { foreignKey: 'userId' });
   const mockRepository = new UserRepository(UserModel);
 
   beforeEach(async () => {
@@ -57,13 +62,19 @@ describe('UserRepository methods', () => {
     expect(users[1].id).toEqual(2);
   });
 
-  test('getById returns a single user from DB', async () => {
+  test('getById returns a single user and its reservations from DB', async () => {
     const userWithoutId = createTestUser();
+    const reservationWithoutId = createTestReservation();
     await mockRepository.save(userWithoutId);
     await mockRepository.save(userWithoutId);
 
-    const user = await mockRepository.getById(2);
+    const userInstance = await mockRepository.userModel.findByPk(2);
+    await userInstance.createReservation(reservationWithoutId);
+    await userInstance.createReservation(reservationWithoutId);
+
+    const { user, reservations } = await mockRepository.getById(2);
     expect(user.id).toEqual(2);
+    expect(reservations).toHaveLength(2);
   });
 
   test('getById throws an error on undefined userId as argument', async () => {

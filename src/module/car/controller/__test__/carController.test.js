@@ -4,8 +4,20 @@ const CarIdNotDefinedError = require('../../error/CarIdNotDefinedError');
 
 const serviceMock = {
   save: jest.fn(),
-  getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestCar(id))),
-  getById: jest.fn((id) => createTestCar(id)),
+  getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestCar(id + 1))),
+  getById: jest.fn((id) => {
+    return {
+      car: createTestCar(id),
+      reservations: Array.from({ length: 3 }, (reservationId) => {
+        return {
+          id: reservationId,
+          carId: '1',
+        };
+      }),
+    };
+  }),
+  getCarsLength: jest.fn(() => 3),
+  getLastCar: jest.fn(() => createTestCar(3)),
   delete: jest.fn(),
 };
 
@@ -42,15 +54,17 @@ describe('CarController methods', () => {
   });
 
   test('index renders index.njk with overall data and last added car', async () => {
-    const cars = serviceMock.getAll();
+    const carsLength = serviceMock.getCarsLength();
+    const lastAddedCar = serviceMock.getLastCar();
     await mockController.index(reqMock, resMock);
 
-    expect(serviceMock.getAll).toHaveBeenCalledTimes(2);
+    expect(serviceMock.getCarsLength).toHaveBeenCalledTimes(2);
+    expect(serviceMock.getLastCar).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('car/views/index.njk', {
       title: 'Rent a Car',
-      cars,
-      lastAddedCar: cars[2],
+      carsLength,
+      lastAddedCar,
     });
   });
 
@@ -66,8 +80,8 @@ describe('CarController methods', () => {
     });
   });
 
-  test('view renders view.njk with a single car', async () => {
-    const car = serviceMock.getById(1);
+  test('view renders view.njk with a single car and its reservations', async () => {
+    const { car, reservations } = serviceMock.getById(1);
     await mockController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
@@ -75,6 +89,7 @@ describe('CarController methods', () => {
     expect(resMock.render).toHaveBeenCalledWith('car/views/view.njk', {
       title: 'Viewing Ford Fiesta 2017',
       car,
+      reservations,
     });
   });
 
@@ -89,7 +104,7 @@ describe('CarController methods', () => {
   });
 
   test('edit renders a form to edit a car', async () => {
-    const car = serviceMock.getById(1);
+    const { car } = serviceMock.getById(1);
     await mockController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
@@ -121,22 +136,48 @@ describe('CarController methods', () => {
 
   test('saves a car with a photo', async () => {
     const reqSaveMock = {
-      body: {},
-      file: { path: '' },
+      body: {
+        id: 1,
+        brand: 'Ford',
+        model: 'Fiesta',
+        year: '2017',
+        kms: '50000',
+        color: 'Blue',
+        ac: 'No',
+        passengers: '5',
+        transmission: 'Manual',
+        price: '3000',
+      },
+      file: { path: '/public/img/no-image-available.jpg' },
     };
 
     await mockController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
+    expect(serviceMock.save).toHaveBeenCalledWith(createTestCar(1));
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });
 
   test('saves a car without a photo', async () => {
     const reqSaveMock = {
-      body: {},
+      body: {
+        id: 1,
+        brand: 'Ford',
+        model: 'Fiesta',
+        year: '2017',
+        kms: '50000',
+        color: 'Blue',
+        ac: 'No',
+        passengers: '5',
+        transmission: 'Manual',
+        price: '3000',
+      },
     };
+    const carWithoutPhoto = createTestCar(1);
+    carWithoutPhoto.img = undefined;
 
     await mockController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
+    expect(serviceMock.save).toHaveBeenCalledWith(carWithoutPhoto);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });
 

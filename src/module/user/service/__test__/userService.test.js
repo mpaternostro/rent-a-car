@@ -7,7 +7,6 @@ const repositoryMock = {
   save: jest.fn(),
   getAll: jest.fn(),
   getById: jest.fn(),
-  delete: jest.fn(),
 };
 
 const mockService = new UserService(repositoryMock);

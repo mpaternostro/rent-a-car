@@ -6,6 +6,8 @@ const CarIdNotDefinedError = require('../../error/CarIdNotDefinedError');
 const repositoryMock = {
   save: jest.fn(),
   getAll: jest.fn(),
+  getCarsLength: jest.fn(),
+  getLastCar: jest.fn(),
   getById: jest.fn(),
   delete: jest.fn(),
 };
@@ -31,6 +33,18 @@ describe('CarService methods', () => {
     await mockService.getAll();
 
     expect(repositoryMock.getAll).toHaveBeenCalledTimes(1);
+  });
+
+  test("getCarsLength calls repository's getCarsLength method", async () => {
+    await mockService.getCarsLength();
+
+    expect(repositoryMock.getCarsLength).toHaveBeenCalledTimes(1);
+  });
+
+  test("getLastCar calls repository's getLastCar method", async () => {
+    await mockService.getLastCar();
+
+    expect(repositoryMock.getLastCar).toHaveBeenCalledTimes(1);
   });
 
   test("getById calls repository's getById method", async () => {

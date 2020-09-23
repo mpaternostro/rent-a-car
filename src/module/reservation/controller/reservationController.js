@@ -25,9 +25,9 @@ module.exports = class reservationController {
     app.get(`${ROUTE}/edit/:reservationId`, this.edit.bind(this));
     app.get(`${ROUTE}/add`, this.add.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
-    app.post(`${ROUTE}/finish/:id`, this.finish.bind(this));
-    app.post(`${ROUTE}/unblock/:id`, this.unblock.bind(this));
-    app.post(`${ROUTE}/pay/:id`, this.pay.bind(this));
+    app.post(`${ROUTE}/finish/:reservationId`, this.finish.bind(this));
+    app.post(`${ROUTE}/unblock/:reservationId`, this.unblock.bind(this));
+    app.post(`${ROUTE}/pay/:reservationId`, this.pay.bind(this));
   }
 
   /**
@@ -112,8 +112,12 @@ module.exports = class reservationController {
    * @param {import('express').Response} res
    */
   async finish(req, res) {
-    const { id } = req.params;
-    const { reservation } = await this.reservationService.getById(id);
+    const { reservationId } = req.params;
+    if (!Number(reservationId)) {
+      throw new ReservationIdNotDefinedError();
+    }
+
+    const { reservation } = await this.reservationService.getById(reservationId);
     await this.reservationService.finish(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
@@ -123,8 +127,12 @@ module.exports = class reservationController {
    * @param {import('express').Response} res
    */
   async unblock(req, res) {
-    const { id } = req.params;
-    const { reservation } = await this.reservationService.getById(id);
+    const { reservationId } = req.params;
+    if (!Number(reservationId)) {
+      throw new ReservationIdNotDefinedError();
+    }
+
+    const { reservation } = await this.reservationService.getById(reservationId);
     await this.reservationService.unblock(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
@@ -134,8 +142,12 @@ module.exports = class reservationController {
    * @param {import('express').Response} res
    */
   async pay(req, res) {
-    const { id } = req.params;
-    const { reservation } = await this.reservationService.getById(id);
+    const { reservationId } = req.params;
+    if (!Number(reservationId)) {
+      throw new ReservationIdNotDefinedError();
+    }
+
+    const { reservation } = await this.reservationService.getById(reservationId);
     await this.reservationService.pay(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }

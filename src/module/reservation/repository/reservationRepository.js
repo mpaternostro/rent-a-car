@@ -54,7 +54,12 @@ module.exports = class ReservationRepository {
       );
     }
     const reservation = fromModelToEntity(reservationInstance);
-    const car = fromCarModelToEntity(reservationInstance.Car);
+    let car;
+    if (reservationInstance.Car) {
+      car = fromCarModelToEntity(reservationInstance.Car);
+    } else {
+      car = reservationInstance.Car;
+    }
     const user = fromUserModelToEntity(reservationInstance.User);
     return { reservation, car, user };
   }

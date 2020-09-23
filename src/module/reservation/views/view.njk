@@ -24,7 +24,11 @@
             <tr>
               <th>Rented Car</th>
               <td>
-                <a href={{ "/car/view/" + car.id }}>{{ "#" + car.id + " " + car.brand + " " + car.model + " " + car.year}}</a>
+                {% if car %}
+                  <a href={{ "/car/view/" + car.id }}>{{ "#" + car.id + " " + car.brand + " " + car.model + " " + car.year}}</a>
+                {% else %}
+                  <p>Rented Car was deleted from Database</p>
+                {% endif %}
               </td>
             </tr>
             <tr>

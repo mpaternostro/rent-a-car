@@ -57,10 +57,10 @@ class ReservationModel extends Model {
    * @param {typeof import('../../user/model/userModel')} UserModel
    */
   static setupAssociations(CarModel, UserModel) {
-    CarModel.hasMany(ReservationModel, { foreignKey: 'carId' });
-    ReservationModel.belongsTo(CarModel, { foreignKey: 'carId' });
-    UserModel.hasMany(ReservationModel, { foreignKey: 'userId' });
-    ReservationModel.belongsTo(UserModel, { foreignKey: 'userId' });
+    CarModel.hasMany(ReservationModel, { foreignKey: 'carId', constraints: false });
+    ReservationModel.belongsTo(CarModel, { foreignKey: 'carId', constraints: false });
+    UserModel.hasMany(ReservationModel, { foreignKey: 'userId', constraints: false });
+    ReservationModel.belongsTo(UserModel, { foreignKey: 'userId', constraints: false });
   }
 }
 

@@ -4,8 +4,18 @@ const UserIdNotDefinedError = require('../../error/UserIdNotDefinedError');
 
 const serviceMock = {
   save: jest.fn(),
-  getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestUser(id))),
-  getById: jest.fn((id) => createTestUser(id)),
+  getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestUser(id + 1))),
+  getById: jest.fn((id) => {
+    return {
+      user: createTestUser(id),
+      reservations: Array.from({ length: 3 }, (reservationId) => {
+        return {
+          id: reservationId + 1,
+          carId: '1',
+        };
+      }),
+    };
+  }),
 };
 
 const reqMock = {
@@ -36,11 +46,7 @@ describe('UserController methods', () => {
   });
 
   test('manage renders manage.njk with a list of users', async () => {
-    const users = serviceMock.getAll().map((user) => {
-      const newUser = Object.assign(user);
-      newUser.formattedBirthdate = '24/12/1990';
-      return newUser;
-    });
+    const users = serviceMock.getAll();
     await mockController.manage(reqMock, resMock);
 
     expect(serviceMock.getAll).toHaveBeenCalledTimes(2);
@@ -51,8 +57,8 @@ describe('UserController methods', () => {
     });
   });
 
-  test('view renders view.njk with a single user', async () => {
-    const user = serviceMock.getById(1);
+  test('view renders view.njk with a single user and its reservations', async () => {
+    const { user, reservations } = serviceMock.getById(1);
     await mockController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
@@ -60,7 +66,7 @@ describe('UserController methods', () => {
     expect(resMock.render).toHaveBeenCalledWith('user/views/view.njk', {
       title: 'Viewing User #1',
       user,
-      formattedBirthdate: '24/12/1990',
+      reservations,
     });
   });
 
@@ -75,7 +81,7 @@ describe('UserController methods', () => {
   });
 
   test('edit renders a form to edit a user', async () => {
-    const user = serviceMock.getById(1);
+    const { user } = serviceMock.getById(1);
     await mockController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
